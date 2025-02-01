@@ -2,6 +2,8 @@
 
 FROST is a decentralized global data catalog protocol for sharing all scientific data.
 
+![updating](https://github.com/user-attachments/assets/2e864f8f-7a29-4ea7-88a7-6b2365071869)
+
 > [!WARNING]  
 > This doesn't actually exist yet, this repo is just for brainstorming ideas. Please contribute!
 
