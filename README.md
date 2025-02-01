@@ -154,18 +154,25 @@ A: Any attempt to split up the catalog by fields of science will inevitably divi
 
 A: No, it’s not general enough (lots of scientific data that isn’t a Spatio-Temporal view of the Earth). See also the section in the motivation blog post.
 
-**Q: Could I catalog X type of data with this?**
+**Q: Could I catalog <X> type of data with this?**
 
 A: The set of allowed data models should be extensible, but restricted to any which have the following properties:
   - version-controlled at rest in object storage, with a uniquely identifiable address/hash for each commit (i.e. icechunk, git itself)
   - some idea of a diff, potentially one that's small enough to be sent over the network (e.g. git diff, icechunk's ChangeSet)
   - bytes can be pulled out via http range requests to a storage URL (so it can be accessed via an S3-compatible API)
   - be able to store very large amounts of data
+  - store arbitrary metadata, e.g. a JSON with no pre-specified schema (zarr/icechunk has this)
 
 Important examples which should already meet these criteria are:
   - Icechunk (multidimensional arrays)
   - Iceberg (tabular)
   - Perhaps LakeFS (unstructured blobs)?
+
+**Q: I want the catalog layer to have a field for <my domain-specific metadata tag>**
+
+No, bad. It's crucial that the catalog remain domain-agnostic. Adding domain-specific choices in catalog schema is one of the main reasons why so many existing projects in this space don't generalize. 
+
+Instead this as a problem to be solved at the level of metadata standards. With the data catalog able to attach arbitrary metadata (e.g. JSON), the field of microscopists can work out amongst themselves some convention for the standard schema of their metadata and what that means to microscopists, whilst climate and weather people can make sure their data follows the CF conventions and so on. This approach is the only one compatible with what a standard _is_ - a community-agreed schema that is extremely useful when followed but you're not forced to follow it.
 
 ### License
 
