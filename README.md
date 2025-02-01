@@ -156,13 +156,13 @@ A: Any attempt to split up the catalog by fields of science will inevitably divi
 
 A: No, it’s not general enough (lots of scientific data that isn’t a Spatio-Temporal view of the Earth). See also the section in the motivation blog post.
 
-**Q: Could I catalog <X> type of data with this?**
+**Q: Could I catalog `<some data type>` with this?**
 
-A: The set of allowed data models should be extensible, but restricted to any which have the following properties:
+A: The set of allowed data models should be extensible, but restricted to those which have the following properties:
   - version-controlled at rest in object storage, with a uniquely identifiable address/hash for each commit (i.e. icechunk, git itself)
-  - some idea of a diff, potentially one that's small enough to be sent over the network (e.g. git diff, icechunk's ChangeSet)
-  - bytes can be pulled out via http range requests to a storage URL (so it can be accessed via an S3-compatible API)
-  - be able to store very large amounts of data
+  - some idea of a diff, potentially one that's small enough to be sent over the network (e.g. git diff, icechunk's `ChangeSet`)
+  - allows bytes can be pulled out via http range requests to a storage URL (so it can be accessed via an S3-compatible API)
+  - be able to store very large amounts of data (this and the previous requirement amount to it being "cloud-optimised")
   - store arbitrary metadata, e.g. a JSON with no pre-specified schema (zarr/icechunk has this)
 
 Important examples which should already meet these criteria are:
@@ -170,19 +170,19 @@ Important examples which should already meet these criteria are:
   - Iceberg (tabular)
   - Perhaps LakeFS (unstructured blobs)?
 
-**Q: Can the catalog layer to have a field for <my domain-specific metadata tag>?**
+**Q: Can the catalog layer have a field for `<my domain-specific metadata tag>`?**
 
-No, bad. It's crucial that the catalog remain domain-agnostic. Adding domain-specific choices in catalog schema is one of the main reasons why so many existing projects in this space don't generalize. 
+No, bad. It's crucial that the catalog remain domain-agnostic. Adding domain-specific choices in catalog schema is one of the main reasons why so many existing projects in this space don't generalize.
 
 Instead this as a problem to be solved at the level of metadata standards. With the data catalog able to attach arbitrary metadata (e.g. JSON), the field of microscopists can work out amongst themselves some convention for the standard schema of their metadata and what that means to microscopists, whilst climate and weather people can make sure their data follows the CF conventions and so on. This approach is the only one compatible with what a standard _is_ - a community-agreed schema that is extremely useful when followed but you're not forced to follow it.
 
-**Q: But shouldn't we enforce the data to <requirement>?
+**Q: But shouldn't we enforce that the data at least has `<requirement>`?**
 
-No. Basically nothing other than the bare minimum for the system to work should be enforced. As soon as you enforce anything it raises the barrier to entry, reducing adoption,
-Your enforcement will inevitably bake in some assumptions that seem reasonable in your field but aren’t meetable in general, so you end up making it less generalizable.
+No. Basically nothing other than the bare minimum for the system to work should be enforced. As soon as you enforce anything it raises the barrier to entry, reducing adoption.
+Your enforcement will also inevitably bake in some assumptions that seem reasonable in your field but aren’t meetable in general, so you end up making it less generalizable.
 Note that GitHub enforces nothing, not even having a license or readme (though it does very strongly suggest them). It doesn’t try to force you to use `pyproject.toml` for a python project or anything like that, it leaves that entirely up to the python community.
 
-Every type of quality control and metadata standardization should similarly be left up to the relevant community. A layered architecture faciliates this - for example you could create a public catalog UI that only displays entries in the registry if their metadata matches some community standardized schema. That would incentivise data providers to make their metadata compliant, but not block them from sharing it if they don’t.
+Every type of quality control and metadata standardization should similarly be left up to the relevant community. A layered architecture faciliates this - for example you could create a community-specific public catalog website that only displays entries in the registry if their metadata matches some community standardized schema. That would incentivise data providers in your community to make their metadata compliant, but not block them from sharing it if they don’t.
 
 ### License
 
