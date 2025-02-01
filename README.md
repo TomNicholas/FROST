@@ -3,7 +3,7 @@
 FROST is a decentralized global data catalog protocol for sharing all scientific data.
 
 > [!WARNING]  
-> This doesn't actually exist yet, this repo is just for brainstorming ideas.
+> This doesn't actually exist yet, this repo is just for brainstorming ideas. Please contribute!
 
 ### Motivation
 
@@ -107,6 +107,10 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
     - Follow RFC2119
     - Language-agnostic
         - Do everything in JSON or similar
+- Network invariants
+  - Must always be a simple graph
+    - Or do we allow cycles?
+  - No node is downstream of a now-deleted node
 
 ### Protocol Implementation:
 
@@ -117,6 +121,28 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
       - Which of these have the right amount of "federation"?
       - Do these have the ability to send arbitrary JSON payloads (to encode information about our updates)
 - Write a dedicated protocol
+
+### MVPs
+
+1. **Hello World**
+
+A network with a single dataset node. It is periodically updated, and publishes the fact it has been updated.
+
+2. **Related data**
+
+A network with two dataset nodes, one which refers to the other as being related in some way, so the graph has a single edge.
+
+3. **Leader-Follower**
+
+A network with two dataset nodes, one downstream which refers to the other upstream, stating that the downstream one has been derived from the upstream one in some specific programatic way, which is retriggered upon each update to the upstream dataset. The graph has a single edge.
+
+4. **Cross-Org Catalog**
+
+A network with two nodes, belonging to different organisations, that are not connected. We check that both nodes can be listed by both orgs.
+
+5. **Cross-Org Follower**
+
+A network with two nodes, belonging to different organisations, one downstream which refers to the other upstream, stating that the downstream one has been derived from the upstream one in some specific programatic way, which is retriggered upon each update to the upstream dataset. The graph has a single edge. We check that both nodes can be listed by both orgs.
 
 ### FAQ’s:
 
