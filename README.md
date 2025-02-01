@@ -1,6 +1,6 @@
 # FROST (Federated Registry Of Scientific Things)
 
-FROST is a decentralized global data catalog protocol for sharing all scientific data.
+FROST is a decentralized global subscribable data catalog protocol for sharing all scientific data.
 
 ![updating](https://github.com/user-attachments/assets/2e864f8f-7a29-4ea7-88a7-6b2365071869)
 
