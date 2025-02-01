@@ -130,14 +130,16 @@ A: No, it’s not general enough (lots of scientific data that isn’t a Spatio-
 
 **Q: Could I catalog X type of data with this?**
 
-A: Only if that data can be represented via some open cloud-native version-controlled common model, e.g:
-  - Icechunk for multidimensional array data
-  - Iceberg for for tabular data
-  - Perhaps LakeFS for unstructured blobs?
+A: The set of allowed data models should be extensible, but restricted to any which have the following properties:
+  - version-controlled at rest in object storage, with a uniquely identifiable address/hash for each commit (i.e. icechunk, git itself)
+  - some idea of a diff, potentially one that's small enough to be sent over the network (e.g. git diff, icechunk's ChangeSet)
+  - bytes can be pulled out via http range requests to a storage URL (so it can be accessed via an S3-compatible API)
+  - be able to store very large amounts of data
 
-**Q: Why so tied to Icechunk/Iceberg?**
-
-A: The version-controlled part is crucial, otherwise updates are not well-defined. The storage formats also need to be scalable and S3-accessible, which Icechunk/Iceberg are.
+Important examples which should already meet these criteria are:
+  - Icechunk (multidimensional arrays)
+  - Iceberg (tabular)
+  - Perhaps LakeFS (unstructured blobs)?
 
 ### License
 
