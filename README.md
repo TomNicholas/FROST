@@ -178,6 +178,10 @@ Each node is a version-controlled dataset sitting in S3, in either Icechunk or I
 
 A source of new data (the satellite) causes the NASA dataset to be updated. A notification of this update is broadcast to it's dependent datasets. A re-computation of these dependents is triggered, and updated versions of each written out.
 
+**Q: Where are the computations which create the new versions of each dataset running?**
+
+A: Not within the FROST network - the compute task deployments are deliberately separate. Those spinning cogs in the GIF are just meant to indicate some task running somewhere that was triggered by a notification sent via FROST, and will publish an update to FROST once the task is complete. (The tasks could even be manual - i.e. a human receives a notification telling them to look at the updated upstream data before deciding how to update their derived dataset.) The compute layer is an area where platform providers could innovate and compete - they could provide something like Github Actions but for automatically updating datasets instead of updating codebases. But their solutions should be quite general - being too prescriptive as to how these computations must be done will discourage people from using the network.
+
 **Q: Why is Icechunk/Iceberg such a big deal?**
 
 A: [Icechunk](https://icechunk.io/) is the biggest thing since [Zarr](https://zarr.dev/). In case you've been living under a rock, or more sympathetically if “Serverless ACID Transactional Array Database” doesn’t mean anything to you (it didn’t to me when I first read it either), let me summarize the implications:
