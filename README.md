@@ -12,14 +12,14 @@ FROST is a decentralized subscribable data catalog protocol for sharing all scie
 ## Motivation
 
 **Context:**
-The best way to store and distribute access to big scientific datasets is via [ARCO data](https://medium.com/pangeo/step-by-step-guide-to-building-a-big-data-portal-e262af1c2977) in S3-compatible storage. We now have scalable cloud-optimised formats that are version-controlled at rest in object storage (particularly [Icechunk](https://icechunk.io/) for arrays and [Iceberg](https://iceberg.apache.org/) for tables). This is _huge_, as even dynamically-updated datasets can now be distributed via raw S3, with no other server needed. All the data providers who are paying attention are about to put their data in these formats, and then they will all immediately try to advertise the S3 URLs to the world via ad-hoc data catalogs.
+The best way to store and provide access to big scientific datasets is via [ARCO data](https://medium.com/pangeo/step-by-step-guide-to-building-a-big-data-portal-e262af1c2977) in S3-compatible cloud object storage. We now have scalable cloud-optimised formats that are version-controlled at rest in object storage (particularly [Icechunk](https://icechunk.io/) for arrays and [Iceberg](https://iceberg.apache.org/) for tables). This is _huge_, as even dynamically-updated datasets can now be distributed via raw S3, with no other server needed. All the data providers who are paying attention are about to put their data in these formats, and then they will try to advertise the S3 URLs to the world via ad-hoc data catalogs.
 
-**Problem: Everyone's catalogs are disconnected from everyone else's**. 
+**Problem: ⛓️‍💥 Everyone's catalogs are disconnected from everyone else's ⛓️‍💥**. 
 
 This means:
 - No cross-org discoverability (e.g. NASA catalog users won't see NOAA datasets or vice versa).
 - No cross-org tracking of updates (e.g. NOAA datasets derived directly from NASA datasets won't automatically know if the NASA datasets have been updated upstream).
-- Risk of "catalog wars" where platform services compete to make more and more comprehensive "meta-catalogs" which merely track (outdated) links to other orgs' data in S3.
+- Risk of "catalog wars" where platform services compete to make more and more comprehensive "meta-catalogs" which merely track (outdated) links to other orgs' data.
 - Risk that if one platform does win everyone might feel locked in to it via the social network effect.
 
 **Solution: Federated catalog protocol with cross-org publish-subcribe model.** 
@@ -172,15 +172,28 @@ A network with two nodes, belonging to different organisations, one downstream w
 
 **Q: That GIF is pretty, but what does it mean?**
 
-The GIF is intended to show notifications of dataset updates propagating through a federated network. 
+A: The GIF is intended to show notifications of dataset updates propagating through a federated network. 
 
 Each node is a version-controlled dataset sitting in S3, in either Icechunk or Iceberg format. The datasets are spread across 3 organisations: NASA, NOAA, and a startup (rocketship). Although each dataset sits in the owning organisation's object storage, the locations, versions, and dependencies of each are shared publicly via the FROST protocol. They thus form a cross-org (federated) network, the FROST network.
 
 A source of new data (the satellite) causes the NASA dataset to be updated. A notification of this update is broadcast to it's dependent datasets. A re-computation of these dependents is triggered, and updated versions of each written out.
 
-**Q: Why does it need to be unified across fields of science?**
+**Q: Why is Icechunk/Iceberg such a big deal?**
 
-A: Any attempt to split up the catalog by fields of science will inevitably divide some community’s interdisciplinary field in two. That's fine at the labelling level, but not cool to force that community to bridge two separate networks to receive all updates they care about. Your data probably isn’t that special anyway, you almost certainly could fit it into this framework.
+A: [Icechunk](https://icechunk.io/) is the biggest thing since [Zarr](https://zarr.dev/). In case you've been living under a rock, or more sympathetically if “Serverless ACID Transactional Array Database” doesn’t mean anything to you (it didn’t to me when I first read it either), let me summarize the implications:
+- Icechunk allows scientific data providers like NASA to make updates, fixes, and additions to their public datasets whenever they like,
+- Without disrupting their users access to the data for even one millisecond, no matter how many scientists are using the data at that moment,
+- The users can look back in time to see what the data looked like in the past (which is crucial if you ever want to reproduce someone else’s data analysis),
+- The Icechunk code can be used by anyone, at any scale, for free, forever, and the format is open so there's no risk of losing access to data,
+- It doesn't require running any server or additional service layer above S3,
+- It's specifically designed to handle scientific array data (e.g. climate model outputs) and stream the data to you efficiently with all the power of Zarr,
+- On top of of that when combined with [VirtualiZarr](https://icechunk.io/icechunk-python/virtual/) you can add all these features to existing data archives of data in pre-cloud formats without making a duplicate copy of PetaBytes of data.
+
+Icechunk is directly inspired by [Apache Iceberg](https://iceberg.apache.org/) (and some similar formats like Delta Tables), which is the same thing but for tabular data.
+
+**Q: Why does the network need to span across different fields of science?**
+
+A: Any attempt to split up the catalog by fields of science will inevitably divide some community’s interdisciplinary field in two. Imagine if github only let you put code for Neuroscience analysis in it. That's fine at the labelling level, but not cool to force that community to bridge two separate networks to receive all updates they care about. Your data probably isn’t that special anyway, you almost certainly could fit it into this framework.
 
 **Q: Can’t we just use STAC?**
 
