@@ -7,15 +7,35 @@ FROST is a decentralized subscribable data catalog protocol for sharing all scie
 > [!WARNING]  
 > This doesn't actually exist yet, this repo is just for brainstorming ideas. Please contribute!
 
-### Motivation
+## Motivation
 
-See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
+**Context:**
+The best way to store and distribute access to big scientific datasets is via [ARCO data](https://medium.com/pangeo/step-by-step-guide-to-building-a-big-data-portal-e262af1c2977) in S3-compatible storage. We now have scalable cloud-optimised formats that are version-controlled at rest in object storage (particularly [Icechunk](https://icechunk.io/) for arrays and [Iceberg](https://iceberg.apache.org/) for tables). This is _huge_, as even dynamically-updated datasets can now be distributed via raw S3, with no other server needed. All the data providers who are paying attention are about to put their data in these formats, and then they will all immediately try to advertise the S3 URLs to the world via ad-hoc data catalogs.
 
-### Concept:
+**Problem: Everyone's catalogs are disconnected from everyone else's**. 
+
+This means:
+- No cross-org discoverability (e.g. NASA catalog users won't see NOAA datasets or vice versa).
+- No cross-org tracking of updates (e.g. NOAA datasets derived directly from NASA datasets won't automatically know if the NASA datasets have been updated upstream).
+- Risk of "catalog wars" where platform services compete to make more and more comprehensive "meta-catalogs" which merely track (outdated) links to other orgs' data in S3.
+- Risk that if one platform does win everyone might feel locked in to it via the social network effect.
+
+**Solution: Federated catalog protocol with cross-org publish-subcribe model.** 
+
+- Cross-org discoverability enabled via displaying the contents of the dataset entries being broadcast,
+- Cross-org tracking of updates to datasets enabled the same way,
+- No need to compete to make a better catalog, as anyone can easily consume and display the entire global catalog, including updates,
+- Federated trust model allows proliferation of high-quality centralized services, whilst also guarding against platform lock-in.
+
+**How do we build it?:** Not sure exactly, but the problem is analogous to creating Federated alternatives to centralized social media (i.e. Bluesky/Mastodon vs Twitter). Perhaps we can piggyback off of Bluesky's ATproto or Mastodon's ActivityPub?
+
+See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
+
+## Concept:
 
 - Decentralized network protocol for disseminating updates to version-controlled datasets
 
-### Idea:
+## Idea:
 
 - Global catalog of version-controlled Icechunk/Iceberg etc. datasets
 - Shared as a decentralized / federated network spanning different organisations, so that no one organisation controls the catalog
@@ -23,7 +43,7 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
 - Allows datasets to subscribe to changes in upstream datasets
 - Doesn’t store or transfer any data, just sends updates about which parts of it have changed
 
-### Inspiration:
+## Inspiration:
 
 - Publisher-Subscriber Model
     - WebSub
@@ -50,14 +70,14 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
     - https://en.wikipedia.org/wiki/Knowledge_commons
     - https://www.proto-okn.net/
 
-### Goals:
+## Goals:
 
 - Version-controlled
 - Subscribable
 - Searchable
-- Decentralized
+- Decentralized (or at least Federated)
 
-### Non-goals:
+## Non-goals:
 
 - Data storage
 - Implementing the version-controlled data model
@@ -65,7 +85,7 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
 - Social network features beyond subscribing (e.g. commenting, liking)
 - Doing any loading/computation/anything else once update is received
 
-### Technical requirements:
+## Technical requirements:
 
 - Entries
     - Uniquely-identifiable
@@ -114,7 +134,7 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
     - Or do we allow cycles?
   - No node is downstream of a now-deleted node
 
-### Protocol Implementation:
+## Protocol Implementation:
 
 - Piggyback off an existing protocol
     - ATproto
@@ -124,7 +144,7 @@ See the [blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
       - Do these have the ability to send arbitrary JSON payloads (to encode information about our updates)
 - Write a dedicated protocol
 
-### MVPs
+## MVPs
 
 1. **Hello World**
 
@@ -146,7 +166,7 @@ A network with two nodes, belonging to different organisations, that are not con
 
 A network with two nodes, belonging to different organisations, one downstream which refers to the other upstream, stating that the downstream one has been derived from the upstream one in some specific programatic way, which is retriggered upon each update to the upstream dataset. The graph has a single edge. We check that both nodes can be listed by both orgs.
 
-### FAQ’s:
+## FAQ’s:
 
 **Q: Why does it need to be unified across fields of science?**
 
@@ -168,7 +188,6 @@ A: The set of allowed data models should be extensible, but restricted to those 
 Important examples which should already meet these criteria are:
   - Icechunk (multidimensional arrays)
   - Iceberg (tabular)
-  - Perhaps LakeFS (unstructured blobs)?
 
 **Q: Can the catalog layer have a field for `<my domain-specific metadata tag>`?**
 
@@ -186,7 +205,7 @@ Every type of quality control and metadata standardization should similarly be l
 
 **Q: Shouldn't we decentralize the storage of the actual data too?**
 
-Sure, if you like. It's possible to do that with [OSN](https://www.openstoragenetwork.org/) pods or even cryptographically securely with [IPFS](https://ipfs.tech/). But that's a _separate layer_ from what FROST is concerned with. FROST only catalogs _references_ (i.e. URLs) to where the data exists, and decentralizes the network of records of where the data actually lives. The actual data is stored outside of the network, for example in some organization's S3 bucket. The storage layer is therefore configurable, with the only requirement being that the location of the data and metadata can be expressed as a single public URL. 
+A: Sure, if you like. It's possible to do that with [OSN](https://www.openstoragenetwork.org/) pods or even cryptographically securely with [IPFS](https://ipfs.tech/). But that's a _separate layer_ from what FROST is concerned with. FROST only catalogs _references_ (i.e. URLs) to where the data exists, and decentralizes the network of records of where the data actually lives. The actual data is stored outside of the network, for example in some organization's S3 bucket. The storage layer is therefore configurable, with the only requirement being that the location of the data and metadata can be expressed as a single public URL. 
 
 ### License
 
