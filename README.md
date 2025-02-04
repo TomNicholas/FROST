@@ -4,6 +4,8 @@ FROST is a decentralized subscribable data catalog protocol for sharing all scie
 
 ![updating](https://github.com/user-attachments/assets/2e864f8f-7a29-4ea7-88a7-6b2365071869)
 
+(See [the FAQ](https://github.com/TomNicholas/FROST?tab=readme-ov-file#faqs) for explanation of the GIF)
+
 > [!WARNING]  
 > This doesn't actually exist yet, this repo is just for brainstorming ideas. Please contribute!
 
@@ -167,6 +169,14 @@ A network with two nodes, belonging to different organisations, that are not con
 A network with two nodes, belonging to different organisations, one downstream which refers to the other upstream, stating that the downstream one has been derived from the upstream one in some specific programatic way, which is retriggered upon each update to the upstream dataset. The graph has a single edge. We check that both nodes can be listed by both orgs.
 
 ## FAQ’s:
+
+**Q: That GIF is pretty, but what does it mean?**
+
+The GIF is intended to show notifications of dataset updates propagating through a federated network. 
+
+Each node is a version-controlled dataset sitting in S3, in either Icechunk or Iceberg format. The datasets are spread across 3 organisations: NASA, NOAA, and a startup (rocketship). Although each dataset sits in the owning organisation's object storage, the locations, versions, and dependencies of each are shared publicly via the FROST protocol. They thus form a cross-org (federated) network, the FROST network.
+
+A source of new data (the satellite) causes the NASA dataset to be updated. A notification of this update is broadcast to it's dependent datasets. A re-computation of these dependents is triggered, and updated versions of each written out.
 
 **Q: Why does it need to be unified across fields of science?**
 
