@@ -33,11 +33,11 @@ This means:
 
 See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
 
-## Concept:
+## Concept
 
 - Decentralized network protocol for disseminating updates to version-controlled datasets
 
-## Idea:
+## Idea
 
 - Global catalog of version-controlled Icechunk/Iceberg etc. datasets
 - Shared as a decentralized / federated network spanning different organisations, so that no one organisation controls the catalog
@@ -45,7 +45,7 @@ See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
 - Allows datasets to subscribe to changes in upstream datasets
 - Doesn’t store or transfer any data, just sends updates about which parts of it have changed
 
-## Inspiration:
+## Inspiration
 
 - Publisher-Subscriber Model
     - WebSub
@@ -72,14 +72,14 @@ See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
     - https://en.wikipedia.org/wiki/Knowledge_commons
     - https://www.proto-okn.net/
 
-## Goals:
+## Goals
 
 - Version-controlled
 - Subscribable
 - Searchable
 - Decentralized (or at least Federated)
 
-## Non-goals:
+## Non-goals
 
 - Data storage
 - Implementing the version-controlled data model
@@ -87,7 +87,7 @@ See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
 - Social network features beyond subscribing (e.g. commenting, liking)
 - Doing any loading/computation/anything else once update is received
 
-## Technical requirements:
+## Technical requirements
 
 - Entries
     - Uniquely-identifiable
@@ -136,7 +136,7 @@ See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
     - Or do we allow cycles?
   - No node is downstream of a now-deleted node
 
-## Protocol Implementation:
+## Protocol Implementation
 
 - Piggyback off an existing protocol
     - ATproto
@@ -168,7 +168,35 @@ A network with two nodes, belonging to different organisations, that are not con
 
 A network with two nodes, belonging to different organisations, one downstream which refers to the other upstream, stating that the downstream one has been derived from the upstream one in some specific programatic way, which is retriggered upon each update to the upstream dataset. The graph has a single edge. We check that both nodes can be listed by both orgs.
 
-## FAQ’s:
+## Use cases
+
+Once such a protocol is in place, many different use cases / business models / services become easier to build.
+
+### Public Dataset Catalog
+
+Data provider organisations could publish their datasets and be confident that anyone interested can programmatically find their data and track their updates. They can still build a catalog showing just their own org's datasets, but they can also broadcast their data offerings in a way that is easy for other organisations to track. (We distinguish between the global _registry_ of all datasets and updates, and various _catalogs_, which are subsets of the registry of interest to one organisation or community.)
+
+### Search Engine
+
+As anyone could consume the "firehose" of public dataset updates, anyone could build a website which filters or queries that entires in any way before displaying them. In particular they could experiment with different models of search, independent of how the actual registry data is disseminated. The simplest example would be keyword-based search (e.g. NOAA could provide a page that displays all datasets across any org, but only those with "ocean" in the metadata), but the same architecture would also allow for more complex semantic search services using ML techniques.
+
+### Data Lake
+
+A platform that provides additional services on top of an organisation's private data is known as a _data lake_. In addition to public cataloging features, the federated protocol would allow datasets in data lakes to recieve and act upon updates from public datasets in other organisations, even if the downstream datasets in the data lake were not publicly exposed.
+
+### Data Marketplace
+
+A data marketplace is basically just a data catalog but with one extra layer between the registry and the storage - an access control layer which grants access to the raw data only upon authenticated payment. This allows for an entirely different business model with almost exactly the same architecture. Sellers of data could broadcast their offerings globally, and if some measure of price was included in the registry schema, their prices could automatically be displayed in anyone else's catalogs. As the price in the catalog need not be the actual price paid upon negotiating with the data provider, the resulting experience would be somewhat like using Facebook Marketplace, where the listed price is only intended as a rough expectation, and actual transactions occur outside of the FROST network.
+
+### Mass Backups
+
+With all links to public datasets made available, anyone could easily find and suck out all the datasets they considered important into a replica as a backup.
+
+### Real-time data services
+
+Updates to datasets should propagate through the network automatically and quickly (in seconds to minutes using ATproto). This enables real-time data services to be built upon the data sharing network, e.g. recomputing wildfire risk each time new satellite imagery becomes available.
+
+## FAQ’s
 
 **Q: That GIF is pretty, but what does it mean?**
 
