@@ -1,0 +1,21 @@
+{
+    "lexicon": 1,
+    "id": "com.frost.dataset.update",
+    "defs": {
+      "main": {
+        "type": "record",
+        "description": "Record declaring some update to a dataset entry.",
+        "key": "tid",
+        "record": {
+          "type": "object",
+          "required": ["subject", "createdAt", "versionTag"],
+          "properties": {
+            "subject": { "type": "string", "format": "did" },
+            "createdAt": { "type": "string", "format": "datetime" },
+            "versionTag": {"type": "string", "maxLength": 40},
+            "diff": {"type": "string", "maxLength": 40}
+          }
+        }
+      }
+    }
+  }

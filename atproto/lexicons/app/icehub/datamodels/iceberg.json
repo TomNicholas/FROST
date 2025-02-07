@@ -1,0 +1,10 @@
+{
+  "lexicon": 1,
+  "id": "app.icehub.datamodels.iceberg",
+  "defs": {
+    "main": {
+      "type": "token",
+      "description": "Iceberg open table format"
+    }
+  }
+}

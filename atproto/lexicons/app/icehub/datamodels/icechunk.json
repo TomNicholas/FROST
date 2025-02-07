@@ -1,0 +1,10 @@
+{
+  "lexicon": 1,
+  "id": "app.icehub.datamodels.icechunk",
+  "defs": {
+    "main": {
+      "type": "token",
+      "description": "Icechunk transactional tensor storage engine"
+    }
+  }
+}

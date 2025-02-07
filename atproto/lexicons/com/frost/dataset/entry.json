@@ -1,0 +1,43 @@
+{
+  "lexicon": 1,
+  "id": "com.frost.dataset.entry",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "A declaration of a registry entry for a single dataset.",
+      "record": {
+        "type": "object",
+        "required": ["displayName", "datasetLocation", "dataModel", "versionTag", "createdAt"],
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "maxGraphemes": 64,
+            "maxLength": 640
+          },
+          "description": {
+            "type": "string",
+            "description": "Free-form dataset description text.",
+            "maxGraphemes": 256,
+            "maxLength": 2560
+          },
+          "dataModel": {
+            "type": "union",
+            "description": "Extensible set of supported data models.",
+            "refs": [
+              "icehub.datamodels.icechunk",
+              "icehub.datamodels.iceberg"
+            ],
+            "closed": false
+          },
+          "datasetLocation": {
+            "type": "string",
+            "description": "URL at which to find the actual dataset.",
+            "format": "uri"
+          },
+          "versionTag": {"type": "string", "maxLength": 40},
+          "createdAt": {"type": "string", "format": "datetime"}
+        }
+      }
+    }
+  }
+}

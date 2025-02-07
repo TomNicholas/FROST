@@ -1,0 +1,19 @@
+{
+  "lexicon": 1,
+  "id": "com.frost.dataset.dependency",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "Record declaring a dataset entry's 'dependency' relationship to another dataset entry. Duplicate follows will be ignored by the AppView.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["subject", "createdAt"],
+        "properties": {
+          "subject": { "type": "string", "format": "did" },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}
