@@ -1,0 +1,25 @@
+Table entries {
+  id integer [primary key]
+  url varchar [not null]
+  name varchar [not null]
+  created_at timestamp [default: `now()`]
+  last_updated_at timestamp [default: `now()`]
+}
+
+Table versions {
+  id integer [primary key]
+  entry_id integer [ref: > entries.id]
+  hash varchar [not null]
+  updated_at timestamp [default: `now()`]
+}
+
+Table dependencies {
+  id integer [primary key]
+  upstream_entry_id integer [ref: > entries.id]
+  downstream_entry_id integer [ref: > entries.id]
+  created_at timestamp [default: `now()`]
+  
+  indexes {
+    (upstream_entry_id, downstream_entry_id) [unique]
+  }
+}
