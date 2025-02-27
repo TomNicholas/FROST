@@ -31,7 +31,8 @@ This means:
 
 **How do we build it?:** Not sure exactly, but the problem is analogous to creating Federated alternatives to centralized social media (i.e. Bluesky/Mastodon vs Twitter). Perhaps we can piggyback off of Bluesky's ATproto or Mastodon's ActivityPub?
 
-See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe)
+> [!NOTE]  
+> See also the [motivating blog post](https://hackmd.io/@TomNicholas/H1KzoYrPJe), and the [presentation on FROST](https://discourse.pangeo.io/t/pangeo-showcase-frost-federated-registry-of-scientific-things-feb-12-2025/4861) at the Pangeo showcase.
 
 ## Concept
 
